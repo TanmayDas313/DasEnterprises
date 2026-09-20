@@ -15,7 +15,7 @@ headers = {
 data = {
     'name': 'Janardan Das Test Verification',
     'business_name': 'DAS ENTERPRISE',
-    'email': 'shoper.dasent@gmail.com',
+    'email': 'support.dasent@hotmail.com',
     'phone': '9879005133',
     'industry': 'Services',
     'product': 'TallyPrime Single User',

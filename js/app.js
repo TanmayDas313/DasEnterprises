@@ -74,7 +74,7 @@ function initMobileMenu() {
   }
 }
 
-/* 3. Product Carousel Controller (12 Products) */
+/* 3. 3D Cover Flow Product Carousel Controller (12 Products) */
 function initProductCarousel() {
   const track = document.getElementById('carousel-track');
   const prevBtn = document.getElementById('carousel-prev');
@@ -83,7 +83,7 @@ function initProductCarousel() {
   
   if (!track) return;
 
-  const slides = track.children;
+  const slides = Array.from(track.children);
   if (slides.length === 0) return;
 
   let currentIndex = 0;
@@ -91,7 +91,7 @@ function initProductCarousel() {
 
   if (dotsContainer) {
     dotsContainer.innerHTML = '';
-    for (let i = 0; i < slides.length; i++) {
+    slides.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = `w-3 h-3 rounded-full transition-all duration-300 ${i === 0 ? 'bg-teal-400 w-8' : 'bg-slate-700'}`;
       dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
@@ -100,25 +100,66 @@ function initProductCarousel() {
         resetAutoplay();
       });
       dotsContainer.appendChild(dot);
-    }
+    });
   }
 
-  function updateDots() {
-    if (!dotsContainer) return;
-    const dots = dotsContainer.children;
-    for (let i = 0; i < dots.length; i++) {
-      if (i === currentIndex) {
-        dots[i].className = 'w-8 h-3 rounded-full bg-teal-400 transition-all duration-300';
+  function update3DCoverFlow() {
+    const isMobile = window.innerWidth < 768;
+
+    slides.forEach((slide, index) => {
+      const card = slide.querySelector('.carousel-card') || slide;
+      let diff = index - currentIndex;
+
+      if (diff > slides.length / 2) diff -= slides.length;
+      if (diff < -slides.length / 2) diff += slides.length;
+
+      if (diff === 0) {
+        // Active Center Elevated Card
+        slide.style.transform = isMobile ? 'translateX(0) scale(1)' : 'translateX(0) scale(1.05)';
+        slide.style.opacity = '1';
+        slide.style.zIndex = '30';
+        slide.style.filter = 'none';
+        card.classList.add('border-2', 'border-teal-500', 'shadow-[0_20px_50px_rgba(13,148,136,0.25)]');
+        card.classList.remove('border-slate-200', 'opacity-60');
+      } else if (Math.abs(diff) === 1) {
+        // Adjacent 3D Stack Cards
+        const dir = diff > 0 ? 1 : -1;
+        slide.style.transform = isMobile ? `translateX(${dir * 100}%) scale(0.9)` : `translateX(${dir * 28}%) scale(0.88)`;
+        slide.style.opacity = isMobile ? '0' : '0.5';
+        slide.style.zIndex = '10';
+        slide.style.filter = isMobile ? 'none' : 'blur(1px)';
+        card.classList.remove('border-2', 'border-teal-500', 'shadow-[0_20px_50px_rgba(13,148,136,0.25)]');
+        card.classList.add('border-slate-200', 'opacity-60');
       } else {
-        dots[i].className = 'w-3 h-3 rounded-full bg-slate-700 hover:bg-slate-500 transition-all duration-300';
+        // Outer hidden cards
+        const dir = diff > 0 ? 1 : -1;
+        slide.style.transform = `translateX(${dir * 60}%) scale(0.7)`;
+        slide.style.opacity = '0';
+        slide.style.zIndex = '0';
+        slide.style.filter = 'blur(4px)';
+      }
+
+      slide.onclick = (e) => {
+        if (index !== currentIndex && !e.target.closest('button')) {
+          goToSlide(index);
+          resetAutoplay();
+        }
+      };
+    });
+
+    if (dotsContainer) {
+      const dots = dotsContainer.children;
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].className = i === currentIndex 
+          ? 'w-8 h-3 rounded-full bg-teal-400 transition-all duration-300' 
+          : 'w-3 h-3 rounded-full bg-slate-700 hover:bg-slate-500 transition-all duration-300';
       }
     }
   }
 
   function goToSlide(index) {
     currentIndex = (index + slides.length) % slides.length;
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    updateDots();
+    update3DCoverFlow();
   }
 
   if (prevBtn) {
@@ -136,6 +177,7 @@ function initProductCarousel() {
   }
 
   function startAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
     autoplayTimer = setInterval(() => {
       goToSlide(currentIndex + 1);
     }, 4500);
@@ -146,14 +188,8 @@ function initProductCarousel() {
     startAutoplay();
   }
 
-  track.parentElement.addEventListener('mouseenter', () => {
-    if (autoplayTimer) clearInterval(autoplayTimer);
-  });
-
-  track.parentElement.addEventListener('mouseleave', () => {
-    startAutoplay();
-  });
-
+  window.addEventListener('resize', update3DCoverFlow);
+  goToSlide(0);
   startAutoplay();
 }
 
