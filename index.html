@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAS ENTERPRISE — Enterprise Software Solutions</title>
+  <meta name="description" content="DAS ENTERPRISE in Ahmedabad. Expert business accounting, GST compliance, inventory management, cloud solutions and customization. Phone: 9879005133, Email: shoper.dasent@gmail.com.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 800: '#1E3E62', 900: '#0B192C', 950: '#050C17' },
+            teal: { 600: '#0D9488', 700: '#0F766E' },
+            amber: { 600: '#D97706' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Supabase JS SDK & Single Credentials Config -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- STICKY HEADER -->
+  <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3 group">
+          <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+          <span class="font-extrabold text-xl tracking-tight text-navy-900 group-hover:text-teal-600 transition-colors">DAS ENTERPRISE</span>
+        </a>
+
+        <!-- Desktop Navigation (NO Industries, NO Case Studies) -->
+        <nav class="hidden lg:flex items-center space-x-8">
+          <a href="index.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600 active">HOME</a>
+          <a href="solutions.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">SOLUTIONS</a>
+          <a href="resources.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">RESOURCES</a>
+          <a href="pricing.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">PRICING</a>
+          <a href="about.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">ABOUT</a>
+          <a href="contact.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">CONTACT</a>
+        </nav>
+
+        <!-- CTA Buttons connected to Supabase Enquiry Modal / Form -->
+        <div class="hidden md:flex items-center space-x-4">
+          <button onclick="openDemoModal()" class="px-4 py-2.5 text-sm font-bold text-navy-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all">
+            Free Demo
+          </button>
+          <a href="#get-started" class="px-5 py-2.5 text-sm font-bold text-white bg-navy-900 hover:bg-navy-800 shadow-md hover:shadow-lg rounded-xl transition-all">
+            Get Started
+          </a>
+        </div>
+
+        <!-- Mobile Menu Trigger -->
+        <div class="flex lg:hidden items-center">
+          <button id="mobile-menu-btn" class="p-2 text-slate-700 hover:text-navy-900 focus:outline-none" aria-label="Toggle Mobile Navigation">
+            <i data-lucide="menu" class="w-7 h-7"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity">
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-2xl p-6 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-10 w-auto object-contain">
+            <span class="font-bold text-navy-900 text-sm">DAS ENTERPRISE</span>
+          </div>
+          <button id="close-mobile-menu" class="p-2 text-slate-500 hover:text-slate-900">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <nav class="mt-8 flex flex-col space-y-4">
+          <a href="index.html" class="px-3 py-2 text-base font-semibold text-teal-600 bg-teal-50 rounded-lg">HOME</a>
+          <a href="solutions.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">SOLUTIONS</a>
+          <a href="resources.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">RESOURCES</a>
+          <a href="pricing.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">PRICING</a>
+          <a href="about.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">ABOUT</a>
+          <a href="contact.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">CONTACT</a>
+        </nav>
+      </div>
+      <div class="pt-6 border-t border-slate-100 space-y-3">
+        <button onclick="openDemoModal()" class="w-full py-3 text-center text-sm font-bold text-navy-900 bg-slate-100 rounded-xl">Free Demo</button>
+        <a href="#get-started" class="block w-full py-3 text-center text-sm font-bold text-white bg-navy-900 rounded-xl">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION WITH WIDER & BROADER PRODUCT CAROUSEL -->
+  <section class="relative bg-gradient-to-b from-white via-slate-50 to-slate-100 py-12 lg:py-16 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Headline & Trust Line -->
+      <div class="text-center max-w-4xl mx-auto mb-10 space-y-4">
+        
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-teal-800 text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
+          <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i>
+          <span>Professional business solutions from DAS ENTERPRISE</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-navy-900 tracking-tight leading-tight">
+          Simplify Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-navy-900 via-teal-700 to-navy-800">Business Accounting</span>
+        </h1>
+
+        <p class="text-base sm:text-xl text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto">
+          Powerful TALLY PRIME and business solutions for smarter accounting, GST compliance, inventory management, reporting and business growth.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <button onclick="openDemoModal()" class="w-full sm:w-auto px-8 py-3.5 text-base font-bold text-white bg-navy-900 hover:bg-navy-800 shadow-xl shadow-navy-900/10 hover:shadow-2xl rounded-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+            <span>Get a Free Demo</span>
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+          <a href="solutions.html" class="w-full sm:w-auto px-8 py-3.5 text-base font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 shadow-sm rounded-xl transition-all flex items-center justify-center gap-2">
+            <span>Explore Solutions</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- WIDER & BROADER PRODUCT SHOWCASE CAROUSEL -->
+      <div class="mt-8 max-w-6xl mx-auto">
+        <div class="relative bg-gradient-to-br from-navy-950 via-navy-900 to-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl overflow-hidden">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 mb-6 border-b border-slate-800/80 gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-teal-400 animate-ping"></span>
+              <div>
+                <h3 class="text-white font-extrabold text-lg sm:text-xl tracking-tight">DAS ENTERPRISE Product Showcase</h3>
+                <p class="text-xs text-slate-400">Complete suite of business accounting, retail, cloud, and enterprise software</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-400 bg-amber-950/80 border border-amber-800/60 px-3 py-1 rounded-full">12 Key Products</span>
+            </div>
+          </div>
+
+          <!-- Broad Carousel Viewport -->
+          <div class="relative overflow-hidden w-full min-h-[320px] flex items-center">
+            <div id="carousel-track" class="carousel-track w-full flex">
+              
+              <!-- Slide 1: Quickbill -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Retail and Manufacturing</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 01 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/quickbill.png" alt="Quickbill Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Quickbill</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Rapid POS and retail billing software designed for speed, barcode integration, and instant customer checkout counters.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Retail & Counter POS</span>
+                    <button onclick="openProductEnquiry('Quickbill')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Shoper 9 -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Retail and Manufacturing</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 02 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/shoper9.png" alt="Shoper 9 Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Shoper 9</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Comprehensive retail chain management application engineered for SKU tracking, store operations, and multi-outlet retail management.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Enterprise Retail Management</span>
+                    <button onclick="openProductEnquiry('Shoper 9')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Logic Erp -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Retail and Manufacturing</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 03 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/logic_erp.png" alt="Logic Erp Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Logic Erp</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Integrated enterprise resource planning solution tailored for manufacturing supply chain, apparel, wholesale, and production operations.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">ERP & Manufacturing</span>
+                    <button onclick="openProductEnquiry('Logic Erp')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 4: HisabKitab -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Accounting & Retail</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 04 of 12</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-3">HisabKitab</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Business management and daily bookkeeping software for streamlined ledger tracking and SME accounting control.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Business Accounting Product</span>
+                    <button onclick="openProductEnquiry('HisabKitab')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 5: Barcode Solutions -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Retail and Manufacturing</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 05 of 12</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-3">Barcode Solutions</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Thermal barcode printers, handheld laser scanners, custom sticker printing, and automated inventory audit setups.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Hardware & Automation</span>
+                    <button onclick="openProductEnquiry('Barcode Solutions')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 6: TallyPrime -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-gradient-to-r from-navy-900 via-teal-950 to-navy-900 rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-teal-500/40 shadow-xl">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-amber-400 uppercase tracking-wider px-3 py-1 bg-amber-950/80 rounded-md border border-amber-800/50">Core Solution</span>
+                      <span class="text-xs font-semibold text-teal-300">Product 06 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-4xl font-extrabold text-white">TallyPrime</h3>
+                    </div>
+                    <p class="text-slate-200 text-sm sm:text-base leading-relaxed max-w-3xl mb-4">India's leading business accounting and GST management software for invoicing, banking reconciliation, and statutory compliance.</p>
+                    
+                    <div class="inline-block bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-mono text-teal-300">
+                      Single User : 22500+GST | Multi User : 67500+GST | Tally Prime Server : 270000+GST
+                    </div>
+                  </div>
+                  <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-teal-400 font-bold">DAS ENTERPRISE</span>
+                    <button onclick="openProductEnquiry('TallyPrime')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Licensing <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 7: Tally on cloud -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Accounting & Remote</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 07 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Tally on cloud</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl mb-4">Secure high-speed remote cloud access to Tally Prime from any location on any PC, laptop, or tablet.</p>
+                    
+                    <div class="inline-block bg-black/40 px-3 py-2 rounded-xl border border-white/10 text-xs font-mono text-teal-300">
+                      Tally On Cloud : Monthly @ 500.00 per User
+                    </div>
+                  </div>
+                  <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Remote Cloud Hosting</span>
+                    <button onclick="openProductEnquiry('Tally On Cloud')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Cloud <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 8: Tally on mobile -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Accounting & Mobile</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 08 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Tally on mobile</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl mb-4">Real-time mobile dashboards for sales vouchers, customer outstanding balances, and inventory positions on smartphones.</p>
+                    
+                    <div class="inline-block bg-black/40 px-3 py-2 rounded-xl border border-white/10 text-xs font-mono text-teal-300">
+                      Tally On Mobile : Rs. 3300 per user Per Year
+                    </div>
+                  </div>
+                  <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Mobile Analytics App</span>
+                    <button onclick="openProductEnquiry('Tally On Mobile')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Mobile <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 9: Tally customization -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Accounting & Custom TDL</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 09 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Tally customization</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl mb-4">Tailored invoice layouts, specialized TDL management reports, approval controls, and custom workflow development.</p>
+                    
+                    <div class="inline-block bg-black/40 px-3 py-2 rounded-xl border border-white/10 text-xs font-mono text-amber-300">
+                      Tally Customisation : call for price
+                    </div>
+                  </div>
+                  <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Custom TDL Engineering</span>
+                    <button onclick="openProductEnquiry('Tally Customisation')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Custom TDL <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 10: Bulk SMS -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Others</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 10 of 12</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-3">Bulk SMS</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Transactional SMS alerts, payment reminders, promotional campaigns, and DLT compliant messaging setups.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Business Communication</span>
+                    <button onclick="openProductEnquiry('Bulk SMS')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire SMS <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 11: Bulk WhatsApp -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Others</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 11 of 12</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-3">Bulk WhatsApp</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Automated WhatsApp dispatch of sales invoice PDFs, customer ledger statements, and instant broadcast updates.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">WhatsApp Messaging API</span>
+                    <button onclick="openProductEnquiry('Bulk WhatsApp')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire WhatsApp <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 12: Antivirus -->
+              <div class="w-full flex-shrink-0 px-2">
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 text-white min-h-[280px] flex flex-col justify-between border border-white/10">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="text-xs font-bold text-teal-400 uppercase tracking-wider px-3 py-1 bg-teal-950/80 rounded-md border border-teal-800/50">Others</span>
+                      <span class="text-xs font-semibold text-slate-400">Product 12 of 12</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                      <img src="assets/software/antivirus.png" alt="Quick Heal Antivirus Logo" class="h-10 w-auto max-w-[140px] object-contain bg-white p-1.5 rounded-xl shadow-sm">
+                      <h3 class="text-3xl font-extrabold text-white">Antivirus</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">Endpoint security protection, ransomware shields, and data encryption for business accounting systems.</p>
+                  </div>
+                  <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Cybersecurity & Protection</span>
+                    <button onclick="openProductEnquiry('Antivirus')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">Enquire Security <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-6 border-t border-slate-800/80">
+            <button id="carousel-prev" class="p-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10" aria-label="Previous Slide">
+              <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            
+            <div id="carousel-dots" class="flex items-center space-x-2"></div>
+            
+            <button id="carousel-next" class="p-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10" aria-label="Next Slide">
+              <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BUSINESS STATISTICS (EXACT METRICS ONLY) -->
+  <section class="bg-navy-900 text-white py-12 border-y border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800/80">
+        
+        <div class="pt-4 md:pt-0">
+          <p class="text-4xl sm:text-5xl font-extrabold text-teal-400 tracking-tight">10+</p>
+          <p class="text-sm sm:text-base font-semibold text-slate-300 mt-2">years of experience</p>
+        </div>
+
+        <div class="pt-4 md:pt-0">
+          <p class="text-4xl sm:text-5xl font-extrabold text-amber-400 tracking-tight">250+</p>
+          <p class="text-sm sm:text-base font-semibold text-slate-300 mt-2">happy customers</p>
+        </div>
+
+        <div class="pt-4 md:pt-0">
+          <p class="text-4xl sm:text-5xl font-extrabold text-teal-400 tracking-tight">600+</p>
+          <p class="text-sm sm:text-base font-semibold text-slate-300 mt-2">successful implementations</p>
+        </div>
+
+        <div class="pt-4 md:pt-0">
+          <p class="text-4xl sm:text-5xl font-extrabold text-amber-400 tracking-tight">24/7</p>
+          <p class="text-sm sm:text-base font-semibold text-slate-300 mt-2">business hours</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY SOLUTIONS SECTION -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-teal-600 mb-2">Comprehensive Capabilities</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight">Everything You Need to Run Your Business Smarter</h3>
+        <p class="mt-4 text-slate-600 text-base sm:text-lg">Integrated accounting, inventory control, and enterprise management tools tailored for modern business efficiency.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="calculator" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">1. Accounting & Bookkeeping</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">GST compliance, invoicing and ledger management with automated tax calculations and voucher entry.</p>
+        </div>
+
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="boxes" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">2. Inventory Management</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">Stock tracking, batch/serial number management and inventory control across multiple godowns.</p>
+        </div>
+
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="bar-chart-3" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">3. Financial Reports</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">P&L statements, balance sheets, cash flow and business reporting with drill-down audit trail capabilities.</p>
+        </div>
+
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="network" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">4. Multi-location Support</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">Branch and location management capabilities allowing unified business tracking across regional outlets.</p>
+        </div>
+
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="shield-check" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">5. Security</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">Data protection, backup and audit trails with user privilege controls and transaction vault protection.</p>
+        </div>
+
+        <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 card-shadow card-shadow-hover">
+          <div class="w-14 h-14 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mb-6">
+            <i data-lucide="cpu" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-xl font-bold text-navy-900 mb-3">6. Integration</h4>
+          <p class="text-slate-600 text-sm leading-relaxed">API capabilities and third-party integrations with banking portals, e-way bill setups, and e-invoicing platforms.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY DAS ENTERPRISE -->
+  <section class="py-20 bg-slate-100/70 border-y border-slate-200/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-6 space-y-6">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-teal-600">Strategic Business Value</h2>
+          <h3 class="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight leading-tight">More Than Accounting. A Smarter Way to Manage Business.</h3>
+          <p class="text-slate-600 text-base leading-relaxed">Partnering with DAS ENTERPRISE gives your organization access to reliable software solutions, expert Tally Prime setup, and ongoing technical support designed to scale your operations smoothly.</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">GST-ready accounting</span>
+            </div>
+
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">Real-time business insights</span>
+            </div>
+
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">Faster invoicing</span>
+            </div>
+
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">Better inventory control</span>
+            </div>
+
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">Secure data management</span>
+            </div>
+
+            <div class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-800">Expert implementation and support</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 card-shadow">
+          <h4 class="text-xl font-bold text-navy-900 mb-4">Dedicated Solution Support</h4>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">At DAS ENTERPRISE, we do not just sell software licenses. We analyze your business workflow, assist with master data migration, configure Tally Prime for your specific industry requirements, and provide hands-on training to your team.</p>
+
+          <div class="space-y-4 border-t border-slate-100 pt-6">
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-semibold text-slate-700">Implementation Success Rate</span>
+              <span class="font-bold text-teal-600">Over 600+ Projects</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-semibold text-slate-700">Customer Satisfaction</span>
+              <span class="font-bold text-teal-600">250+ Active Businesses</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-semibold text-slate-700">Regional Expertise</span>
+              <span class="font-bold text-teal-600">Ahmedabad & Beyond</span>
+            </div>
+          </div>
+
+          <a href="about.html" class="mt-8 block text-center py-3 px-6 text-sm font-bold text-white bg-navy-900 hover:bg-navy-800 rounded-xl transition-all">
+            Learn More About DAS ENTERPRISE
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GET STARTED / CONVERSION ENQUIRY FORM CONNECTED DIRECTLY TO SUPABASE -->
+  <section id="get-started" class="py-20 bg-gradient-to-br from-slate-900 via-navy-900 to-navy-950 text-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-5 space-y-6">
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-950/80 px-3 py-1 rounded-md border border-amber-800/60">Take Action Today</span>
+          <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">Ready to Simplify Your Business?</h2>
+          <p class="text-slate-300 text-base leading-relaxed">Schedule a free live demonstration or consult with our Tally Prime specialists to discover the right solution for your enterprise.</p>
+
+          <div class="space-y-4 pt-4 border-t border-slate-800">
+            <div class="flex items-center gap-3">
+              <i data-lucide="phone" class="w-5 h-5 text-teal-400"></i>
+              <span class="text-sm font-semibold text-slate-200">9879005133</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="mail" class="w-5 h-5 text-teal-400"></i>
+              <span class="text-sm font-semibold text-slate-200">shoper.dasent@gmail.com</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5"></i>
+              <span class="text-sm font-semibold text-slate-200">B-201, Status 2, Opposite R3 Mall, Drive in Road, Ahmedabad- 380052</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white text-slate-800 p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-100">
+          <h3 class="text-2xl font-bold text-navy-900 mb-2">Request a Free Demo</h3>
+          <p class="text-slate-500 text-sm mb-6">Fill out your details below and our team will get back to you promptly.</p>
+
+          <form id="hero-demo-form" class="enquiry-form space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Your Name *</label>
+                <input type="text" name="name" required placeholder="e.g. Rajesh Shah" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Business Name *</label>
+                <input type="text" name="business" placeholder="e.g. Apex Enterprises" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
+                <input type="email" name="email" required placeholder="name@company.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Phone Number *</label>
+                <input type="tel" name="phone" required placeholder="e.g. 9879005133" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Industry</label>
+              <select name="industry" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm bg-white">
+                <option value="">Select your industry...</option>
+                <option value="Retail">Retail & Supermarket</option>
+                <option value="Manufacturing">Manufacturing & Production</option>
+                <option value="Wholesale">Wholesale & Distribution</option>
+                <option value="Services">Professional Services</option>
+                <option value="Other">Other Business</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Requirements / Message</label>
+              <textarea name="message" rows="3" placeholder="Tell us about your software or Tally customization needs..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 text-sm"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-4 bg-navy-900 hover:bg-navy-800 text-white font-bold text-base rounded-xl transition-all shadow-lg hover:shadow-xl">
+              Submit Enquiry
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CORPORATE FOOTER -->
+  <footer class="bg-navy-950 text-white border-t border-slate-800 pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- SOFTWARE LOGOS FOOTER SHOWCASE -->
+      <div class="pb-10 mb-10 border-b border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="layers" class="w-5 h-5 text-teal-400"></i>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Software Solutions Offered:</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/logic_erp.png" alt="Logic ERP Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/quickbill.png" alt="Quickbill Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/shoper9.png" alt="Shoper 9 Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/antivirus.png" alt="Antivirus Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-10 w-auto object-contain">
+            <span class="font-extrabold text-xl tracking-tight text-white">DAS ENTERPRISE</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
+            DAS ENTERPRISE provides complete software implementation, custom TDL solutions, cloud hosting, and business automation across Gujarat and India.
+          </p>
+          <div class="pt-2 text-xs text-slate-300 space-y-1">
+            <p><strong class="text-slate-100">Phone:</strong> 9879005133</p>
+            <p><strong class="text-slate-100">Email:</strong> shoper.dasent@gmail.com</p>
+            <p><strong class="text-slate-100">Address:</strong> B-201, Status 2, Opposite R3 Mall, Drive in Road, Ahmedabad- 380052</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Solutions</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="solutions.html#accounting" class="hover:text-teal-400 transition-colors">Accounting</a></li>
+            <li><a href="solutions.html#inventory" class="hover:text-teal-400 transition-colors">Inventory</a></li>
+            <li><a href="solutions.html#gst" class="hover:text-teal-400 transition-colors">GST Compliance</a></li>
+            <li><a href="solutions.html#reporting" class="hover:text-teal-400 transition-colors">Financial Reporting</a></li>
+            <li><a href="solutions.html#cloud" class="hover:text-teal-400 transition-colors">Cloud Solutions</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Products</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400 transition-colors">TallyPrime</a></li>
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400 transition-colors">Tally On Cloud</a></li>
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400 transition-colors">Tally On Mobile</a></li>
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400 transition-colors">HisabKitab</a></li>
+            <li><a href="pricing.html#retail-and-manufacturing" class="hover:text-teal-400 transition-colors">Quickbill</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Company & Info</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="about.html" class="hover:text-teal-400 transition-colors">About Us</a></li>
+            <li><a href="resources.html" class="hover:text-teal-400 transition-colors">Resources & Tutorials</a></li>
+            <li><a href="resources.html#faq" class="hover:text-teal-400 transition-colors">FAQ</a></li>
+            <li><a href="contact.html" class="hover:text-teal-400 transition-colors">Contact Us</a></li>
+            <li><a href="admin.html" class="hover:text-teal-400 transition-colors">Admin Portal</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <p>© 2026 DAS ENTERPRISE. All Rights Reserved.</p>
+        <p class="mt-2 sm:mt-0 text-slate-400">DAS ENTERPRISE — Business Software Solutions</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

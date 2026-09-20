@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — DAS ENTERPRISE Enquiries</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 800: '#1E3E62', 900: '#0B192C', 950: '#050C17' },
+            teal: { 600: '#0D9488', 700: '#0F766E' },
+            amber: { 600: '#D97706' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP ADMIN BAR -->
+  <header class="bg-navy-950 text-white border-b border-slate-800 py-4 px-6 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-9 w-auto object-contain">
+        <div>
+          <span class="font-extrabold text-base tracking-tight block leading-none">DAS ENTERPRISE</span>
+          <span class="text-[10px] text-teal-400 font-bold uppercase tracking-wider">Customer Enquiry Admin Portal</span>
+        </div>
+      </div>
+      <div id="admin-user-bar" class="hidden flex items-center gap-4 text-xs">
+        <span id="admin-email-display" class="text-slate-300 font-medium">admin@dasenterprise.com</span>
+        <button id="admin-logout-btn" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGIN SECTION (Shown if not authenticated) -->
+  <main id="admin-login-section" class="flex-grow flex items-center justify-center p-4">
+    <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-navy-900 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md">
+          <i data-lucide="lock" class="w-7 h-7"></i>
+        </div>
+        <h1 class="text-2xl font-extrabold text-navy-900">Admin Login</h1>
+        <p class="text-xs text-slate-500 mt-1">Sign in to view customer enquiries</p>
+      </div>
+
+      <form id="admin-login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+          <input type="email" id="admin-login-email" required placeholder="admin@dasenterprise.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-navy-900 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+          <input type="password" id="admin-login-password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-navy-900 text-sm">
+        </div>
+        
+        <div id="admin-login-error" class="hidden p-3 bg-red-50 text-red-600 text-xs rounded-xl font-medium border border-red-200"></div>
+
+        <button type="submit" id="admin-login-submit" class="w-full py-3.5 bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm rounded-xl transition-all shadow-md">
+          Sign In to Dashboard
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 text-center text-[11px] text-slate-400 leading-relaxed">
+        Protected admin dashboard. Authorized access only.<br>
+        Supabase RLS policies enforce secure data privacy.
+      </div>
+    </div>
+  </main>
+
+  <!-- PROTECTED DASHBOARD (Shown if authenticated) -->
+  <main id="admin-dashboard-section" class="hidden flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+    
+    <!-- Top Metrics & Controls -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div>
+        <h1 class="text-2xl font-extrabold text-navy-900">Customer Enquiries</h1>
+        <p class="text-xs text-slate-500 mt-0.5">Real-time database records submitted via DAS ENTERPRISE website</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-semibold text-slate-500">Total Records: <strong id="total-enquiries-count" class="text-navy-900 font-bold text-sm">0</strong></span>
+        <button id="refresh-enquiries-btn" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters & Search Bar -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-1 sm:grid-cols-12 gap-4">
+      <div class="sm:col-span-6 relative">
+        <input type="text" id="admin-search-input" placeholder="Search by Name, Email, Business, Phone, Product..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-navy-900">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+      </div>
+
+      <div class="sm:col-span-3">
+        <select id="admin-source-filter" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white font-medium">
+          <option value="all">All Sources</option>
+          <option value="contact">Contact Form</option>
+          <option value="free_demo">Free Demo</option>
+          <option value="get_started">Get Started</option>
+          <option value="product_enquiry">Product Enquiry</option>
+        </select>
+      </div>
+
+      <div class="sm:col-span-3">
+        <select id="admin-sort-filter" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white font-medium">
+          <option value="newest">Sort: Newest First</option>
+          <option value="oldest">Sort: Oldest First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Enquiries Table -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-navy-900 text-white text-xs font-bold">
+              <th class="p-3.5">Date / Time</th>
+              <th class="p-3.5">Name</th>
+              <th class="p-3.5">Business Name</th>
+              <th class="p-3.5">Email</th>
+              <th class="p-3.5">Phone</th>
+              <th class="p-3.5">Product</th>
+              <th class="p-3.5">Source</th>
+              <th class="p-3.5 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="enquiries-table-body" class="divide-y divide-slate-100 text-xs text-slate-700">
+            <tr>
+              <td colspan="8" class="p-8 text-center text-slate-400">Loading customer enquiries...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ENQUIRY DETAIL MODAL -->
+  <div id="enquiry-detail-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <h3 class="text-lg font-bold text-navy-900">Enquiry Details</h3>
+        <button id="close-detail-modal" class="p-1.5 text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 py-4 text-xs">
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Date Submitted:</strong> <span id="modal-detail-date" class="font-bold text-navy-900"></span></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Name:</strong> <span id="modal-detail-name" class="font-bold text-navy-900"></span></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Business Name:</strong> <span id="modal-detail-business" class="font-semibold text-slate-800"></span></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Email Address:</strong> <a id="modal-detail-email" class="text-teal-700 font-bold hover:underline"></a></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Phone Number:</strong> <a id="modal-detail-phone" class="text-teal-700 font-bold hover:underline"></a></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Industry:</strong> <span id="modal-detail-industry" class="font-medium text-slate-700"></span></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Product Specified:</strong> <span id="modal-detail-product" class="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded"></span></div>
+        <div><strong class="text-slate-500 uppercase block text-[10px]">Source:</strong> <span id="modal-detail-source" class="font-bold uppercase text-teal-800 bg-teal-50 px-2 py-0.5 rounded"></span></div>
+        <div>
+          <strong class="text-slate-500 uppercase block text-[10px]">Requirements / Message:</strong>
+          <p id="modal-detail-message" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-700 mt-1 whitespace-pre-wrap leading-relaxed"></p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-slate-100 flex justify-end">
+        <button id="close-modal-footer-btn" class="px-5 py-2.5 bg-navy-900 text-white font-bold text-xs rounded-xl hover:bg-navy-800 transition-all">
+          Close Details
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

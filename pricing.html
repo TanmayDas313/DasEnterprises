@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products & Pricing — DAS ENTERPRISE</title>
+  <meta name="description" content="Official pricing for Tally Prime, Tally Prime Subscription, Tally On Cloud, Tally On Mobile, and customized software solutions from DAS ENTERPRISE.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 800: '#1E3E62', 900: '#0B192C', 950: '#050C17' },
+            teal: { 600: '#0D9488', 700: '#0F766E' },
+            amber: { 600: '#D97706' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Supabase JS SDK & Single Credentials Config -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+
+  <!-- HEADER -->
+  <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <a href="index.html" class="flex items-center gap-3 group">
+          <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+          <span class="font-extrabold text-xl tracking-tight text-navy-900 group-hover:text-teal-600 transition-colors">DAS ENTERPRISE</span>
+        </a>
+
+        <!-- Desktop Navigation (NO Industries, NO Case Studies) -->
+        <nav class="hidden lg:flex items-center space-x-8">
+          <a href="index.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">HOME</a>
+          <a href="solutions.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">SOLUTIONS</a>
+          <a href="resources.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">RESOURCES</a>
+          <a href="pricing.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600 active">PRICING</a>
+          <a href="about.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">ABOUT</a>
+          <a href="contact.html" class="nav-link text-sm font-semibold text-slate-700 hover:text-teal-600">CONTACT</a>
+        </nav>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="contact.html" class="px-5 py-2.5 text-sm font-bold text-white bg-navy-900 hover:bg-navy-800 shadow-md rounded-xl transition-all">Get Started</a>
+        </div>
+
+        <div class="flex lg:hidden items-center">
+          <button id="mobile-menu-btn" class="p-2 text-slate-700 hover:text-navy-900">
+            <i data-lucide="menu" class="w-7 h-7"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-2xl p-6 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-10 w-auto object-contain">
+            <span class="font-bold text-navy-900 text-sm">DAS ENTERPRISE</span>
+          </div>
+          <button id="close-mobile-menu" class="p-2 text-slate-500 hover:text-slate-900">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <nav class="mt-8 flex flex-col space-y-4">
+          <a href="index.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">HOME</a>
+          <a href="solutions.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">SOLUTIONS</a>
+          <a href="resources.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">RESOURCES</a>
+          <a href="pricing.html" class="px-3 py-2 text-base font-semibold text-teal-600 bg-teal-50 rounded-lg">PRICING</a>
+          <a href="about.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">ABOUT</a>
+          <a href="contact.html" class="px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-50 rounded-lg">CONTACT</a>
+        </nav>
+      </div>
+      <div class="pt-6 border-t border-slate-100">
+        <a href="contact.html" class="block w-full py-3 text-center text-sm font-bold text-white bg-navy-900 rounded-xl">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO TOP HEADER -->
+  <section class="bg-navy-900 text-white py-16 lg:py-20 border-b border-navy-800 text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <span class="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-950/80 px-3.5 py-1.5 rounded-full border border-teal-800/60 inline-block mb-4">Official Product Licensing</span>
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Business Solutions That Fit Your Needs</h1>
+      <p class="mt-4 text-slate-300 text-base sm:text-lg">Explore accounting, retail, manufacturing, cloud and business solutions from DAS ENTERPRISE.</p>
+    </div>
+  </section>
+
+  <!-- CATEGORY NAVIGATION TABS (DESKTOP & MOBILE RESPONSIVE) -->
+  <section class="sticky top-20 z-30 bg-slate-100/90 backdrop-blur-md border-b border-slate-200 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-start md:justify-center space-x-2 sm:space-x-4 overflow-x-auto no-scrollbar py-1">
+        <button data-category="all" class="pricing-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-navy-900 text-white shadow-md flex-shrink-0">
+          ALL CATEGORIES
+        </button>
+        <button data-category="retail-and-manufacturing" class="pricing-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 hover:bg-slate-200/80 border border-slate-200 flex-shrink-0">
+          RETAIL AND MANUFACTURING
+        </button>
+        <button data-category="accounting" class="pricing-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 hover:bg-slate-200/80 border border-slate-200 flex-shrink-0">
+          ACCOUNTING
+        </button>
+        <button data-category="others" class="pricing-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 hover:bg-slate-200/80 border border-slate-200 flex-shrink-0">
+          OTHERS
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN PRICING CONTENT SECTIONS -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+
+      <!-- CATEGORY 1: RETAIL AND MANUFACTURING -->
+      <div id="retail-and-manufacturing" class="pricing-category-section scroll-mt-36">
+        <div class="border-b border-slate-200 pb-4 mb-8 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Category 1</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-900">RETAIL AND MANUFACTURING</h2>
+          </div>
+          <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">5 Products</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Retail Solution</span>
+                <img src="assets/software/quickbill.png" alt="Quickbill Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Quickbill</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">High-speed retail counter billing, barcode scanning, and instant customer receipt printing.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Quickbill')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Enterprise Retail</span>
+                <img src="assets/software/shoper9.png" alt="Shoper 9 Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Shoper 9</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Designed for multi-store retail chains, apparel outlets, SKU management, and centralized stock auditing.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Shoper 9')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Manufacturing & ERP</span>
+                <img src="assets/software/logic_erp.png" alt="Logic Erp Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Logic Erp</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Production planning, raw material BOM tracking, wholesale distribution, and supply chain control.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Logic Erp')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Business Management</span>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">HisabKitab</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Practical daily bookkeeping and payment ledger software for small and medium enterprise operations.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('HisabKitab')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Hardware & Labeling</span>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Barcode Solutions</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Barcode printers, thermal label scanners, integration scripts, and customized sticker generation.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Barcode Solutions')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 2: ACCOUNTING (VERBATIM PRICING) -->
+      <div id="accounting" class="pricing-category-section scroll-mt-36">
+        <div class="border-b border-slate-200 pb-4 mb-8 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Category 2</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-900">ACCOUNTING</h2>
+          </div>
+          <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">5 Products</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Tally Prime & Tally Prime Subscription -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-xl flex flex-col justify-between relative overflow-hidden lg:col-span-2">
+            <div class="absolute top-0 right-0 bg-gradient-to-l from-navy-900 to-navy-800 text-amber-400 font-bold text-xs uppercase px-4 py-1.5 rounded-bl-2xl shadow-sm">
+              Official Tally Licensing
+            </div>
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-md">Official Tally Licensing</span>
+                <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-6">
+                
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-teal-500/40 transition-all">
+                  <div class="flex items-center gap-2 mb-3">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-teal-600"></i>
+                    <h4 class="text-xl font-extrabold text-navy-900">Tally Prime</h4>
+                  </div>
+                  
+                  <div class="space-y-2.5 pt-2 border-t border-slate-200/80 text-sm">
+                    <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200/60">
+                      <span class="text-xs font-semibold text-slate-500">Single User</span>
+                      <span class="font-extrabold text-navy-900 font-mono">22500+GST</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200/60">
+                      <span class="text-xs font-semibold text-slate-500">Multi User</span>
+                      <span class="font-extrabold text-navy-900 font-mono">67500+GST</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200/60">
+                      <span class="text-xs font-semibold text-slate-500">Tally Prime Server</span>
+                      <span class="font-extrabold text-navy-900 font-mono">270000+GST</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-500/40 transition-all">
+                  <div class="flex items-center gap-2 mb-3">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-600"></i>
+                    <h4 class="text-xl font-extrabold text-navy-900">Tally Prime Subscription</h4>
+                  </div>
+                  
+                  <div class="space-y-2.5 pt-2 border-t border-slate-200/80 text-sm">
+                    <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200/60">
+                      <span class="text-xs font-semibold text-slate-500">Single User</span>
+                      <span class="font-extrabold text-amber-700 font-mono">4500+GST</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200/60">
+                      <span class="text-xs font-semibold text-slate-500">Multi User</span>
+                      <span class="font-extrabold text-amber-700 font-mono">13500+GST</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">Official software license setup, renewal subscription processing, and data migration by DAS ENTERPRISE.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 text-center">
+              <button onclick="openProductEnquiry('TallyPrime')" class="py-2.5 px-6 bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold rounded-xl transition-all shadow-md">Enquire Tally Licensing</button>
+            </div>
+          </div>
+
+          <!-- HisabKitab -->
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Business Solution</span>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">HisabKitab</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Daily ledger tracking, credit collection reminders, and cash statement management.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('HisabKitab')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <!-- Tally On Cloud -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-teal-700 uppercase tracking-wider bg-teal-50 px-2.5 py-1 rounded">Cloud Remote</span>
+                <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-3">Tally On Cloud</h3>
+              
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-center">
+                <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Subscription Rate</span>
+                <span class="text-sm font-extrabold text-teal-700 font-mono block">Monthly @ 500.00  per User</span>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">High-speed secure remote access to Tally Prime from any laptop, tablet, or home PC with automatic daily backups.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 text-center">
+              <button onclick="openProductEnquiry('Tally On Cloud')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Enquire Cloud Plan</button>
+            </div>
+          </div>
+
+          <!-- Tally On Mobile -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded">Mobile Analytics</span>
+                <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-3">Tally On Mobile</h3>
+              
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-center">
+                <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Annual Mobile Rate</span>
+                <span class="text-sm font-extrabold text-amber-700 font-mono block">Rs. 3300 per user Per Year</span>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">Access real-time sales reports, customer outstanding ledgers, stock positions, and voucher entries on iOS & Android.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 text-center">
+              <button onclick="openProductEnquiry('Tally On Mobile')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Enquire Mobile Plan</button>
+            </div>
+          </div>
+
+          <!-- Tally Customisation -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-navy-800 uppercase tracking-wider bg-slate-100 px-2.5 py-1 rounded">TDL Engineering</span>
+                <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-3">Tally Customisation</h3>
+              
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-center">
+                <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Custom Scope</span>
+                <span class="text-sm font-extrabold text-navy-900 font-mono block">call for price</span>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">Tailored invoice formats, specific management reports, approval workflows, and specialized TDL module engineering.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 text-center">
+              <button onclick="openProductEnquiry('Tally Customisation')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Enquire Custom TDL</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 3: OTHERS -->
+      <div id="others" class="pricing-category-section scroll-mt-36">
+        <div class="border-b border-slate-200 pb-4 mb-8 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Category 3</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-900">OTHERS</h2>
+          </div>
+          <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">3 Products</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Communication</span>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Bulk SMS</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Transactional SMS alerts, DLT approved sender IDs, payment reminders, and broadcast promotional campaigns.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Bulk SMS')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Messaging API</span>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Bulk WhatsApp</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Automated WhatsApp dispatch of invoice PDFs, customer ledger statements, and interactive payment links.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Bulk WhatsApp')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between card-shadow card-shadow-hover">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cybersecurity</span>
+                <img src="assets/software/antivirus.png" alt="Antivirus Logo" class="h-8 w-auto max-w-[120px] object-contain bg-white p-1 rounded-lg border border-slate-200">
+              </div>
+              <h3 class="text-xl font-bold text-navy-900 mt-1 mb-2">Antivirus</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-6">Endpoint computer protection, ransomware prevention, database firewall, and system security for accounting PCs.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-200">
+              <button onclick="openProductEnquiry('Antivirus')" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl text-center block transition-all">Available on Request</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SINGLE PROMINENT CALL TO ACTION CONNECTED TO SUPABASE -->
+  <section class="py-16 bg-navy-900 text-white text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-extrabold mb-3">Need Custom Pricing or Software Demonstration?</h2>
+      <p class="text-slate-300 text-sm mb-6 max-w-xl mx-auto">Get in touch with Janardan Das and the DAS ENTERPRISE team to discuss your software licensing and Tally customization requirements.</p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <button onclick="openDemoModal()" class="px-8 py-3.5 bg-amber-500 hover:bg-amber-400 text-navy-950 font-bold text-sm rounded-xl shadow-lg transition-all">
+          Request a Free Demo
+        </button>
+        <a href="contact.html" class="px-8 py-3.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all">
+          Send an Enquiry to DAS ENTERPRISE
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy-950 text-white border-t border-slate-800 pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- SOFTWARE LOGOS FOOTER SHOWCASE -->
+      <div class="pb-10 mb-10 border-b border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="layers" class="w-5 h-5 text-teal-400"></i>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Software Solutions Offered:</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/tally_prime.png" alt="Tally Prime Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/logic_erp.png" alt="Logic ERP Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/quickbill.png" alt="Quickbill Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/shoper9.png" alt="Shoper 9 Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm hover:scale-105 transition-all">
+            <img src="assets/software/antivirus.png" alt="Antivirus Logo" class="h-6 sm:h-7 w-auto max-w-[100px] object-contain">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img src="assets/logo.png" alt="DAS ENTERPRISE Logo" class="h-10 w-auto object-contain">
+            <span class="font-extrabold text-xl tracking-tight text-white">DAS ENTERPRISE</span>
+          </div>
+          <div class="pt-2 text-xs text-slate-300 space-y-1">
+            <p><strong class="text-slate-100">Phone:</strong> 9879005133</p>
+            <p><strong class="text-slate-100">Email:</strong> shoper.dasent@gmail.com</p>
+            <p><strong class="text-slate-100">Address:</strong> B-201, Status 2, Opposite R3 Mall, Drive in Road, Ahmedabad- 380052</p>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Solutions</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="solutions.html#accounting" class="hover:text-teal-400">Accounting</a></li>
+            <li><a href="solutions.html#inventory" class="hover:text-teal-400">Inventory</a></li>
+            <li><a href="solutions.html#gst" class="hover:text-teal-400">GST Compliance</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Products</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400">TallyPrime</a></li>
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400">Tally On Cloud</a></li>
+            <li><a href="pricing.html#accounting" class="hover:text-teal-400">Tally On Mobile</a></li>
+            <li><a href="pricing.html#retail-and-manufacturing" class="hover:text-teal-400">Quickbill</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Company</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="about.html" class="hover:text-teal-400">About Us</a></li>
+            <li><a href="contact.html" class="hover:text-teal-400">Contact Us</a></li>
+            <li><a href="admin.html" class="hover:text-teal-400">Admin Portal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <p>© 2026 DAS ENTERPRISE. All Rights Reserved.</p>
+        <p class="mt-2 sm:mt-0 text-slate-400">DAS ENTERPRISE — Business Software Solutions</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
