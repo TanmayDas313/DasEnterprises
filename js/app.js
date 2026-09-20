@@ -386,11 +386,16 @@ function showSuccessModal(name) {
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
         </div>
         <h3 class="text-2xl font-bold text-navy-900 mb-2">Thank You, <span id="modal-user-name"></span>!</h3>
-        <p class="text-slate-600 text-sm mb-6">Your enquiry has been recorded in Supabase. A DAS ENTERPRISE TALLY PRIME specialist will contact you shortly.</p>
+        <p id="modal-success-text" class="text-slate-600 text-sm mb-6 leading-relaxed">Your inquiry has been successfully recorded. A Das Enterprise Expert will review your details and contact you shortly to assist with your requirements.</p>
         <button id="close-modal-btn" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3 px-6 rounded-xl transition-all">Close</button>
       </div>
     `;
     document.body.appendChild(modal);
+  } else {
+    const successText = document.getElementById('modal-success-text');
+    if (successText) {
+      successText.textContent = "Your inquiry has been successfully recorded. A Das Enterprise Expert will review your details and contact you shortly to assist with your requirements.";
+    }
   }
 
   document.getElementById('modal-user-name').textContent = name || 'Valued Customer';
